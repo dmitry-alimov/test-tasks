@@ -1,102 +1,40 @@
 package com.gd.internship.alimov;
 
-import org.junit.After;
-import org.junit.Before;
+import org.junit.Assert;
 import org.junit.Test;
 
-import java.io.*;
-
-import static org.junit.Assert.assertEquals;
-
 public class JavaDataTypesTest {
-    private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
-    private final ByteArrayOutputStream errContent = new ByteArrayOutputStream();
-    private final PrintStream originalOut = System.out;
-    private final PrintStream originalErr = System.err;
-    private final InputStream original = System.in;
-    private FileInputStream fips = null;
-
-    @Before
-    public void setUpStreams() {
-        System.setOut(new PrintStream(outContent));
-        System.setErr(new PrintStream(errContent));
-    }
-
-    @After
-    public void restoreStreams() {
-        System.setOut(originalOut);
-        System.setErr(originalErr);
-    }
 
     @Test
-    public void javaDataTypesMain1Test() throws IOException {
-        fips = new FileInputStream("./src/test/resources/javaDataTypes1Test.txt");
-        System.setIn(fips);
-        JavaDataTypes.main(null);
-        System.setIn(original);
-        assertEquals("-150 can be fitted in:\n" +
+    public void intsFittedTest(){
+        String expected1 = "-150 can be fitted in:\n" +
                 "* short\n" +
                 "* int\n" +
-                "* long\n" +
-                "150000 can be fitted in:\n" +
-                "* int\n" +
-                "* long\n" +
-                "1500000000 can be fitted in:\n" +
-                "* int\n" +
-                "* long\n" +
-                "213333333333333333333333333333333333 can't be fitted anywhere.\n" +
-                "-100000000000000 can be fitted in:\n" +
-                "* long\n", outContent.toString());
-    }
+                "* long\n";
 
-    @Test
-    public void javaDataTypesMain2Test() throws IOException {
-        fips = new FileInputStream("./src/test/resources/javaDataTypes2Test.txt");
-        System.setIn(fips);
-        JavaDataTypes.main(null);
-        System.setIn(original);
-        assertEquals("9223372036854775808 can't be fitted anywhere.\n" +
-                "9223372036854775807 can be fitted in:\n" +
-                "* long\n" +
-                "-9223372036854775808 can be fitted in:\n" +
-                "* long\n" +
-                "-9223372036854775807 can be fitted in:\n" +
-                "* long\n" +
-                "4294967296 can be fitted in:\n" +
-                "* long\n" +
-                "4294967295 can be fitted in:\n" +
-                "* long\n" +
-                "-4294967296 can be fitted in:\n" +
-                "* long\n" +
-                "-4294967295 can be fitted in:\n" +
-                "* long\n" +
-                "65536 can be fitted in:\n" +
+        String expected2 = "150000 can be fitted in:\n" +
                 "* int\n" +
-                "* long\n" +
-                "65535 can be fitted in:\n" +
-                "* int\n"+"* long\n" +
-                "-65536 can be fitted in:\n" +
+                "* long\n";
+
+        String expected3 = "1500000000 can be fitted in:\n" +
                 "* int\n" +
-                "* long\n" +
-                "-65535 can be fitted in:\n" +
-                "* int\n" +
-                "* long\n" +
-                "256 can be fitted in:\n" +
-                "* short\n" +
-                "* int\n" +
-                "* long\n" +
-                "255 can be fitted in:\n" +
-                "* short\n" +
-                "* int\n" +
-                "* long\n" +
-                "-256 can be fitted in:\n" +
-                "* short\n" +
-                "* int\n" +
-                "* long\n" +
-                "-255 can be fitted in:\n" +
-                "* short\n" +
-                "* int\n" +
-                "* long\n" +
-                "12222222222222222222222222222222222222222221 can't be fitted anywhere.\n", outContent.toString());
+                "* long\n";
+
+        String expected4 = "213333333333333333333333333333333333 can't be fitted anywhere.\n";
+
+        String expected5 = "-100000000000000 can be fitted in:\n" +
+                "* long\n";
+
+        String actual1 = JavaDataTypes.intsFitted("-150");
+        String actual2 = JavaDataTypes.intsFitted("150000");
+        String actual3 = JavaDataTypes.intsFitted("1500000000");
+        String actual4 = JavaDataTypes.intsFitted("213333333333333333333333333333333333");
+        String actual5 = JavaDataTypes.intsFitted("-100000000000000");
+
+        Assert.assertEquals(expected1,actual1);
+        Assert.assertEquals(expected2,actual2);
+        Assert.assertEquals(expected3,actual3);
+        Assert.assertEquals(expected4,actual4);
+        Assert.assertEquals(expected5,actual5);
     }
 }

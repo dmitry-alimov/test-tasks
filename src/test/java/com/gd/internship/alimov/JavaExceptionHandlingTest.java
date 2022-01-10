@@ -1,46 +1,30 @@
 package com.gd.internship.alimov;
 
-import org.junit.After;
-import org.junit.Before;
+import org.junit.Assert;
 import org.junit.Test;
-
-import java.io.*;
 
 import static org.junit.Assert.assertEquals;
 
 public class JavaExceptionHandlingTest {
 
-    private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
-    private final ByteArrayOutputStream errContent = new ByteArrayOutputStream();
-    private final PrintStream originalOut = System.out;
-    private final PrintStream originalErr = System.err;
-    private final InputStream original = System.in;
-    private FileInputStream fips;
-
-    @Before
-    public void setUpStreams() {
-        System.setOut(new PrintStream(outContent));
-        System.setErr(new PrintStream(errContent));
-    }
-
-    @After
-    public void restoreStreams() {
-        System.setOut(originalOut);
-        System.setErr(originalErr);
-    }
-
     @Test
-    public void JavaExceptionHandling1Test() throws IOException {
-        fips = new FileInputStream("./src/test/resources/javaExceptionHandling1Test.txt");
-        System.setIn(fips);
-        JavaExceptionHandling.main(null);
-        System.setIn(original);
+    public void powerTest() throws Exception {
 
-        assertEquals("243\n" +
-                "16\n" +
-                "java.lang.Exception: n and p should not be zero.\n" +
-                "java.lang.Exception: n or p should not be negative.\n" +
-                "java.lang.Exception: n or p should not be negative.\n", outContent.toString());
-        fips.close();
+        String actual1 = JavaExceptionHandling.power(3, 5);
+        String actual2 = JavaExceptionHandling.power(2, 4);
+
+        assertEquals("243", actual1);
+        assertEquals("16", actual2);
+
+        Exception actual3 = Assert.assertThrows(Exception.class, () -> JavaExceptionHandling.power(0, 0));
+
+        Exception actual4 = Assert.assertThrows(Exception.class, () -> JavaExceptionHandling.power(-1, -2));
+
+        Exception actual5 = Assert.assertThrows(Exception.class, () -> JavaExceptionHandling.power(-1, 3));
+
+        assertEquals("n and p should not be zero.", actual3.getMessage());
+        assertEquals("n or p should not be negative.", actual4.getMessage());
+        assertEquals("n or p should not be negative.", actual5.getMessage());
     }
+
 }
