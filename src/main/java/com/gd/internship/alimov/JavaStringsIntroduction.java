@@ -1,42 +1,25 @@
 package com.gd.internship.alimov;
 
-import java.util.*;
-
 public class JavaStringsIntroduction {
 
-    public static void main(String[] args) {
+    public static String[] result(String a, String b) {
 
-        Scanner sc = new Scanner(System.in);
-        String A = sc.next();
-        String B = sc.next();
-        /* Enter your code here. Print output to STDOUT. */
-        System.out.println(A.length()+B.length());
+        int generalLength = a.length() + b.length();
 
-        if (A.compareTo(B)>0) {
-            System.out.println("Yes");
-        } else System.out.println("No");
+        String yesOrNo = isLexicographicallyGreater(a, b) ? "\nYes" : "\nNo";
 
-        List<String> listStrings = new ArrayList<>(Arrays.asList(A,B));
+        a = capitalizeFirstLetter(a) + a.substring(1);
+        b = capitalizeFirstLetter(b) + b.substring(1);
 
-        printList(rebaseStringsToFirstCharacterUpperCase(listStrings));
+        return new String[]{String.valueOf(generalLength), yesOrNo, a, b};
     }
 
-    public static List<String> rebaseStringsToFirstCharacterUpperCase(List<String> list){
-
-        ListIterator<String> i = list.listIterator();
-
-        while (i.hasNext()) {
-            String s = i.next();
-            i.set(s.substring(0,1)
-                    .toUpperCase(Locale.ROOT) + s.substring(1));
-        }
-        return list;
+    public static boolean isLexicographicallyGreater(String a, String b) {
+        return a.compareTo(b) > 0;
     }
 
-    public static void printList(List<String> list){
-        for (Object item: list) {
-            System.out.print(item +" ");
-        }
+    public static String capitalizeFirstLetter(String s) {
+        return s.substring(0, 1).toUpperCase();
     }
 }
 
