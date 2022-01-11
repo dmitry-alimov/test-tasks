@@ -1,13 +1,13 @@
 package com.gd.internship.alimov;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class JavaBigDecimalTest {
 
     @Test
-    public void descendingBigDecimalsTest1() {
+    public void descending_Big_Decimals_Test_1() {
         String[] expected = new String[]{
                 "90",
                 "56.6",
@@ -37,7 +37,7 @@ public class JavaBigDecimalTest {
     }
 
     @Test
-    public void descendingBigDecimalsTest2() {
+    public void descending_Big_Decimals_Test_2() {
 
         String[] expected = new String[]{
                 "324324",

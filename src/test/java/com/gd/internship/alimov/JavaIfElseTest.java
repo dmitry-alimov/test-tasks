@@ -1,13 +1,13 @@
 package com.gd.internship.alimov;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class JavaIfElseTest {
 
     @Test
-    public void weirdOrNotTest() {
+    public void weird_Or_Not_Test() {
         String actual1 = JavaIfElse.weirdOrNot(3);
         String actual2 = JavaIfElse.weirdOrNot(24);
         String actual3 = JavaIfElse.weirdOrNot(23);

@@ -1,21 +1,15 @@
 package com.gd.internship.alimov;
 
-import org.junit.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class AnagramsTest {
 
-    @Test
-    public void isAnagramTest() {
-
-        boolean actual1 = Anagrams.isAnagram("Hello", "hello");
-        boolean actual2 = Anagrams.isAnagram("bbcccxxxyyy", "yyxxyxccbcb");
-        boolean actual3 = Anagrams.isAnagram("anagram", "marganaa");
-
-        assertTrue(actual1);
-        assertTrue(actual2);
-        assertFalse(actual3);
+    @ParameterizedTest
+    @CsvSource({"Hello,hello", "bbcccxxxyyy,yyxxyxccbcb", "anagram,marganaa"})
+    void is_Anagram_Test(String a, String b) {
+        assertTrue(Anagrams.isAnagram(a,b));
     }
 }
