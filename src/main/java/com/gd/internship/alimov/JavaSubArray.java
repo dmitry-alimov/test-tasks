@@ -5,41 +5,38 @@ public class JavaSubArray {
     static int count;
 
     static int countNegativeSubArrays(int[] a, int range) {
+        if (a == null) {
+            return 0;
+        }
+
         if (range == 1) {
             return a[0] < 0 ? 1 : 0;
         }
 
-        int countNegative = 0;
-        int[] temp;
+        int discardFromTheBeginning = 0;
 
         for (int i = 0; i < a.length - 1; i++) {
             for (int j = i; j < a.length - 1; j++) {
-                temp = new int[a.length];
-                if (a.length - countNegative < 1) {
+                if (a.length - discardFromTheBeginning < 1) {
                     break;
                 }
-                System.arraycopy(a, countNegative, temp, 0, a.length - countNegative);
-                sum(temp, countNegative);
-                countNegative++;
+                sum(a, discardFromTheBeginning, 0);
+                discardFromTheBeginning++;
             }
         }
         return count;
     }
 
-    static void sum(int[] array, int countNegative) {
-        int count = 0;
-        int[] a = new int[array.length];
+    static void sum(int[] array, int discardFromTheBeginning, int discardFromTheEnd) {
+        int sumSubArray = 0;
 
-        System.arraycopy(array, 0, a, 0, array.length - countNegative);
-
-        for (int j : a) {
-            if (j == 0) break;
-            count += j;
+        for (int j = discardFromTheBeginning; j < array.length - discardFromTheEnd; j++) {
+            sumSubArray += array[j];
         }
 
-        if (count < 0) JavaSubArray.count++;
+        if (sumSubArray < 0) count++;
 
-        if (countNegative == array.length) {
-        } else sum(array, ++countNegative);
+        if (discardFromTheEnd == array.length) {
+        } else sum(array, discardFromTheBeginning, ++discardFromTheEnd);
     }
 }

@@ -16,24 +16,29 @@ public class Anagrams {
             a = a.toLowerCase();
             b = b.toLowerCase();
 
-            String[] A = a.split("");
-            String[] B = b.split("");
+            char[] charsA = stringToChar(b);
+            char[] charsB = stringToChar(a);
 
-            int[] includedA = mapChars(A);
-            int[] includedB = mapChars(B);
+            int[] includedA = mapChars(charsA);
+            int[] includedB = mapChars(charsB);
 
             return Arrays.equals(includedA, includedB);
         }
     }
 
-    static int[] mapChars(String[] str) {
-        int[] included = new int[26];
-        String letters = "abcdefghijklmnopqrstuvwxyz";
-
-        for (String ch : str) {
-            included[letters.indexOf(ch)]++;
+    static char[] stringToChar(String str) {
+        char[] chars = new char[str.length()];
+        for (int i = 0; i < str.length(); i++) {
+            chars[i] = str.charAt(i);
         }
-        
+        return chars;
+    }
+
+    static int[] mapChars(char[] chars) {
+        int[] included = new int[26];
+        for (char ch : chars) {
+            included[ch - 97]++;
+        }
         return included;
     }
 }
