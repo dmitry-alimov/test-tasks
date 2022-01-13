@@ -16,22 +16,14 @@ public class Anagrams {
             a = a.toLowerCase();
             b = b.toLowerCase();
 
-            char[] charsA = stringToChar(b);
-            char[] charsB = stringToChar(a);
+            char[] charsA = b.toCharArray();
+            char[] charsB = a.toCharArray();
 
             int[] includedA = mapChars(charsA);
             int[] includedB = mapChars(charsB);
 
             return Arrays.equals(includedA, includedB);
         }
-    }
-
-    static char[] stringToChar(String str) {
-        char[] chars = new char[str.length()];
-        for (int i = 0; i < str.length(); i++) {
-            chars[i] = str.charAt(i);
-        }
-        return chars;
     }
 
     static int[] mapChars(char[] chars) {

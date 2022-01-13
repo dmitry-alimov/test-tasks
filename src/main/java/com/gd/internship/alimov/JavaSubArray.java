@@ -2,9 +2,9 @@ package com.gd.internship.alimov;
 
 public class JavaSubArray {
 
-    static int count;
+    public int count;
 
-    static int countNegativeSubArrays(int[] a, int range) {
+    public int countNegativeSubArrays(int[] a, int range) {
         if (a == null) {
             return 0;
         }
@@ -27,7 +27,7 @@ public class JavaSubArray {
         return count;
     }
 
-    static void sum(int[] array, int discardFromTheBeginning, int discardFromTheEnd) {
+    public void sum(int[] array, int discardFromTheBeginning, int discardFromTheEnd) {
         int sumSubArray = 0;
 
         for (int j = discardFromTheBeginning; j < array.length - discardFromTheEnd; j++) {

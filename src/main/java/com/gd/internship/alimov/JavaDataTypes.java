@@ -11,20 +11,20 @@ public class JavaDataTypes {
         try {
 
             x = Long.parseLong(str);
-            String res = x + " can be fitted in:\n";
+            String res = x + " can be fitted in: ";
             sb.append(res);
 
             if (x >= -128 && x <= 127)
-                sb.append("* byte\n");
+                sb.append("* byte ");
             if (x >= Short.MIN_VALUE && x <= Short.MAX_VALUE)
-                sb.append("* short\n");
+                sb.append("* short ");
             if (x >= Integer.MIN_VALUE && x <= Integer.MAX_VALUE)
-                sb.append("* int\n");
+                sb.append("* int ");
             if (x >= Long.MIN_VALUE && x <= Long.MAX_VALUE)
-                sb.append("* long\n");
+                sb.append("* long");
 
         } catch (Exception e) {
-            sb.append(str).append(" can't be fitted anywhere.\n");
+            sb.append(str).append(" can't be fitted anywhere.");
         }
         return sb.toString();
     }

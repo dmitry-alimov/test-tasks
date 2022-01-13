@@ -22,7 +22,3 @@ public class JavaStringsIntroduction {
         return s.substring(0, 1).toUpperCase();
     }
 }
-
-
-
-

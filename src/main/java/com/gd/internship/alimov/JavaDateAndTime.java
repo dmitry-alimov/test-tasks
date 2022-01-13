@@ -10,4 +10,3 @@ class JavaDateAndTime {
         return dayOfWeek.toString();
     }
 }
-
