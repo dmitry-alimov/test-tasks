@@ -1,6 +1,8 @@
 package com.gd.internship.alimov;
 
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import java.util.InputMismatchException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -8,24 +10,36 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class JavaExceptionHandlingTryCatchTest {
 
-    @Test
-    public void divide_Test() {
-        String actual1 = JavaExceptionHandlingTryCatch.divide("10", "3");
-        assertEquals("3", actual1);
+    @DisplayName("Should pass when method returns num")
+    @ParameterizedTest
+    @CsvSource({"10,3,3", "4,2,2"})
+    public void divide_Test(String x, String y, String expected) {
+        String actual1 = JavaExceptionHandlingTryCatch.divide(x, y);
+        assertEquals(expected, actual1);
     }
 
-    @Test
-    public void divide_Test_With_Exception() {
+    @DisplayName("Should pass when method returns InputMismatchException")
+    @ParameterizedTest
+    @CsvSource({"10,Hello"})
+    public void divide_Test_With_InputMismatchException(String a, String b) {
+        Exception actual = assertThrows(Exception.class, () -> JavaExceptionHandlingTryCatch.divide(a, b));
+        assertEquals(InputMismatchException.class, actual.getClass());
+    }
 
-        Exception actual1 = assertThrows(Exception.class, () -> JavaExceptionHandlingTryCatch.divide("10", "Hello"));
-        Exception actual2 = assertThrows(Exception.class, () -> JavaExceptionHandlingTryCatch.divide("10", "0"));
-        Exception actual3 = assertThrows(Exception.class, () -> JavaExceptionHandlingTryCatch.divide("23.323", "0"));
+    @DisplayName("Should pass when method returns / by zero ArithmeticException")
+    @ParameterizedTest
+    @CsvSource({"10, 0"})
+    public void divide_Test_With_By_Zero_ArithmeticException(String a, String b) {
+        Exception actual = assertThrows(Exception.class, () -> JavaExceptionHandlingTryCatch.divide(a, b));
+        assertEquals("/ by zero", actual.getMessage());
+        assertEquals(ArithmeticException.class, actual.getClass());
+    }
 
-        assertEquals(InputMismatchException.class, actual1.getClass());
-
-        assertEquals("/ by zero", actual2.getMessage());
-        assertEquals(ArithmeticException.class, actual2.getClass());
-
-        assertEquals(InputMismatchException.class, actual3.getClass());
+    @DisplayName("Should pass when method returns ArithmeticException")
+    @ParameterizedTest
+    @CsvSource({"23.323, 0"})
+    public void divide_Test_With_ArithmeticException(String a, String b) {
+        Exception actual = assertThrows(Exception.class, () -> JavaExceptionHandlingTryCatch.divide(a, b));
+        assertEquals(InputMismatchException.class, actual.getClass());
     }
 }
