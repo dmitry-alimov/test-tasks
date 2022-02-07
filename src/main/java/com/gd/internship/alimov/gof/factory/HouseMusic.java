@@ -11,10 +11,4 @@ public class HouseMusic extends Music {
     public void awakenDance() {
         System.out.println("I˙m dance");
     }
-
-    @Override
-    public Music createGenre() {
-        return new HouseMusic();
-    }
-
 }

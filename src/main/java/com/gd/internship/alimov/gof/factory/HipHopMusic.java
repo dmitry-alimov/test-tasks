@@ -11,10 +11,4 @@ public class HipHopMusic extends Music {
     public void awakenDance() {
         System.out.println("I˙m rapper. Drop the mic");
     }
-
-    @Override
-    public Music createGenre() {
-        return new HipHopMusic();
-    }
-
 }
