@@ -2,13 +2,13 @@ package com.gd.internship.alimov.gof.factory;
 
 public class MusicFactory {
 
-    public Music getMusic(String musicType) {
-        if (musicType == null) {
+    public Music getMusic(MusicGenre musicGenre) {
+        if (musicGenre == null) {
             return null;
         }
-        if (musicType.equalsIgnoreCase("HIPHOP")) {
+        if (musicGenre == MusicGenre.HIPHOP) {
             return new HipHopMusic();
-        } else if (musicType.equalsIgnoreCase("HOUSE")) {
+        } else if (musicGenre == MusicGenre.HOUSE) {
             return new HouseMusic();
         }
         return new Music();
