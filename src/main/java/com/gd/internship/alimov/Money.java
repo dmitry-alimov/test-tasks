@@ -3,7 +3,7 @@ package com.gd.internship.alimov;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
-public class Money {
+public final class Money {
 
     private final BigDecimal amount;
     private final Currency currency;
