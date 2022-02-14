@@ -7,6 +7,7 @@ import com.gd.internship.alimov.stream.model.Product;
 import com.gd.internship.alimov.stream.util.AveragingBigDecimalCollector;
 
 import java.math.BigDecimal;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -15,6 +16,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toMap;
 
 /**
  * This class provides several methods to collect statistical information from customers and orders of an e-shop.
@@ -35,10 +37,7 @@ class OrderStats {
      * @return list, containing orders paid with provided card type
      */
     static List<Order> ordersForCardType(final Stream<Customer> customers, PaymentInfo.CardType cardType) {
-        List<Order> allOrders = customers.map(Customer::getOrders)
-                .flatMap(List::stream)
-                .collect(toList());
-        return allOrders.stream()
+        return customers.flatMap(customer -> customer.getOrders().stream())
                 .filter(order -> order.getPaymentInfo()
                         .getCardType().equals(cardType))
                 .collect(toList());
@@ -54,12 +53,11 @@ class OrderStats {
      * @return map, where order size values mapped to lists of orders
      */
     static Map<Integer, List<Order>> orderSizes(final Stream<Order> orders) {
-        return orders.collect(Collectors.toList()).stream()
-                .collect(Collectors.groupingBy(
-                        x -> x.getOrderItems().size(),
-                        Collectors.mapping(
-                                Order::getOrder, Collectors.toList()
-                        )));
+        return orders.collect(Collectors.groupingBy(
+                x -> x.getOrderItems().size(),
+                Collectors.mapping(
+                        Order::getOrder, Collectors.toList()
+                )));
     }
 
     /**
@@ -87,9 +85,9 @@ class OrderStats {
      * @return map, where for each customer email there is a long referencing a number of different credit cards this customer uses.
      */
     static Map<String, Long> cardsCountForCustomer(final Stream<Customer> customers) {
-        return customers.collect(Collectors.toMap(
+        return customers.collect(toMap(
                 Customer::getEmail,
-                x -> (long) x.getOrders().stream()
+                x -> (long) x.getOrders().stream().distinct()
                         .map(o -> o.getPaymentInfo().getCardNumber())
                         .collect(Collectors.toSet())
                         .size()));
@@ -118,7 +116,9 @@ class OrderStats {
     static Optional<String> mostPopularCountry(final Stream<Customer> customers) {
         return customers.map(a -> a.getAddress().getCountry())
                 .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()))
-                .entrySet().stream()
+                .entrySet()
+                .stream()
+                .sorted(Map.Entry.comparingByKey(Comparator.naturalOrder()))
                 .max(Map.Entry.comparingByValue())
                 .map(Map.Entry::getKey).stream().findFirst();
     }
