@@ -1,14 +1,12 @@
 package com.gd.internship.alimov.stream.tasks;
 
-import com.gd.internship.alimov.stream.model.Customer;
-import com.gd.internship.alimov.stream.model.Order;
-import com.gd.internship.alimov.stream.model.PaymentInfo;
-import com.gd.internship.alimov.stream.model.Product;
+import com.gd.internship.alimov.stream.model.*;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -25,13 +23,13 @@ public class OrderStatsTest {
     private Stream<Order> orderStream;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         customerStream = customers.stream();
         orderStream = orders.stream();
     }
 
     @Test
-    public void task1Test1() {
+    public void ordersForCardTypeVisa() {
         final List<Order> visaOrders = OrderStats.ordersForCardType(customerStream, PaymentInfo.CardType.VISA);
         assertEquals("There are 17 orders payed with VISA card in this stream",
                 17, visaOrders.size());
@@ -40,23 +38,14 @@ public class OrderStatsTest {
     }
 
     @Test
-    public void task1Test2() {
-        final List<Order> visaOrders = OrderStats.ordersForCardType(customerStream.limit(3), PaymentInfo.CardType.VISA);
-        assertEquals("There are 11 orders payed with VISA card in this stream",
-                11, visaOrders.size());
-        assertEquals("Order #47021 was payed using VISA card",
-                47021, (long) visaOrders.get(9).getOrderId());
-    }
-
-    @Test
-    public void task1Test3() {
+    public void ordersForCardType_No_Orders_With_Mastercard() {
         final List<Order> visaOrders = OrderStats.ordersForCardType(Stream.empty(), PaymentInfo.CardType.MASTERCARD);
-        assertEquals("There are not orders payed with VISA card in this stream",
+        assertEquals("There are not orders payed with MASTERCARD card in this stream",
                 0, visaOrders.size());
     }
 
     @Test
-    public void task2Test1() {
+    public void orderSizes() {
         final Stream<Order> orders = orderStream;
         final Map<Integer, List<Order>> orderSizes = OrderStats.orderSizes(orders);
         assertEquals("There are 3 orders with size = 15 in this stream", 2, orderSizes.get(5).size());
@@ -65,27 +54,27 @@ public class OrderStatsTest {
     }
 
     @Test
-    public void task2Test2() {
+    public void orderSizes_With_Empty_Stream() {
         final Map<Integer, List<Order>> orderSizes = OrderStats.orderSizes(Stream.empty());
         assertEquals("Empty stream of order should produce empty map", 0, orderSizes.size());
     }
 
     @Test
-    public void task3Test1() {
+    public void hasColorProduct_With_Red_Product() {
         final Stream<Order> orders = orderStream.limit(2).skip(7);
         final boolean hasColorProduct = OrderStats.hasColorProduct(orders, Product.Color.RED);
         assertEquals("Each of the orders in this stream contains red product", true, hasColorProduct);
     }
 
     @Test
-    public void task3Test2() {
+    public void hasColorProduct_With_Blue_Product() {
         final Stream<Order> orders = orderStream.limit(4).skip(1);
         final boolean hasColorProduct = OrderStats.hasColorProduct(orders, Product.Color.BLUE);
         assertEquals("One of the orders in this stream does not contains any blue products", false, hasColorProduct);
     }
 
     @Test
-    public void task4Test1() {
+    public void cardsCountForCustomer() {
         final Map<String, Long> cardsForCustomer = OrderStats.cardsCountForCustomer(customerStream);
 
         final long actual1 = cardsForCustomer.get("DonnaDonna@gmail.com");
@@ -105,25 +94,52 @@ public class OrderStatsTest {
     }
 
     @Test
-    public void task5Test1() {
+    public void mostPopularCountry_With_Parameters_Great_Britain() {
         final Optional<String> mostPopularCountry = OrderStats.mostPopularCountry(customerStream);
         assertEquals(Optional.of("Great Britain"), mostPopularCountry);
     }
 
     @Test
-    public void task5Test2() {
+    public void mostPopularCountry_With_Parameters_USA() {
         final Optional<String> mostPopularCountry = OrderStats.mostPopularCountry(customerStream.skip(2));
         assertEquals(Optional.of("USA"), mostPopularCountry);
     }
 
     @Test
-    public void task5Test3() {
+    public void mostPopularCountry_All_Countries_Are_Popular_But_Last_More() {
+        ArrayList countries = new ArrayList();
+        countries.add("USA");
+        countries.add("Russia");
+        countries.add("Ao");
+
+        ArrayList<Customer> customers = new ArrayList<>();
+        int i = 12;
+        int k = 0;
+        while (i > 0) {
+            Customer customer = new Customer();
+            AddressInfo addressInfo = new AddressInfo();
+            addressInfo.setCountry(String.valueOf(countries.get(k)));
+            customer.setAddress(addressInfo);
+            customers.add(customer);
+            k++;
+            if (k == 3) {
+                k = 0;
+            }
+            i--;
+        }
+
+        final Optional<String> mostPopularCountry = OrderStats.mostPopularCountry(customers.stream());
+        assertEquals(Optional.of("Ao"), mostPopularCountry);
+    }
+
+    @Test
+    public void cardsCountForCustomer_With_Parameters_Empty_Optional() {
         final Optional<String> mostPopularCountry = OrderStats.mostPopularCountry(Stream.empty());
         assertEquals(Optional.empty(), mostPopularCountry);
     }
 
     @Test
-    public void task6Test1() {
+    public void averageProductPriceForCreditCard() {
         final String testCardNumber = "9785 5409 1111 5555";
         final BigDecimal avgPrice = OrderStats.averageProductPriceForCreditCard(customerStream, testCardNumber);
         assertEquals("Invalid average product price for card " + testCardNumber,
@@ -131,23 +147,7 @@ public class OrderStatsTest {
     }
 
     @Test
-    public void task6Test2() {
-        final String testCardNumber = "4111 3456 5454 9900";
-        final BigDecimal avgPrice = OrderStats.averageProductPriceForCreditCard(customerStream, testCardNumber);
-        assertEquals("Invalid average product price for card " + testCardNumber,
-                520.19, avgPrice.setScale(2, RoundingMode.CEILING).doubleValue(), 0.01);
-    }
-
-    @Test
-    public void task6Test3() {
-        final String testCardNumber = "6677 5432 9587 1670";
-        final BigDecimal avgPrice = OrderStats.averageProductPriceForCreditCard(customerStream, testCardNumber);
-        assertEquals("Invalid average product price for card " + testCardNumber,
-                499.85, avgPrice.setScale(2, RoundingMode.CEILING).doubleValue(), 0.01);
-    }
-
-    @Test
-    public void task6Test4() {
+    public void averageProductPriceForCreditCard_With_Parameters_Empty_Stream() {
         final String testCardNumber = "9785 5409 1111 5555";
         final BigDecimal zeroPrice = OrderStats.averageProductPriceForCreditCard(Stream.empty(), testCardNumber);
         assertEquals("Average product price for empty stream of customers should be 0",
@@ -155,7 +155,7 @@ public class OrderStatsTest {
     }
 
     @Test
-    public void task6Test5() {
+    public void averageProductPriceForCreditCard_With_Non_Existing_Card() {
         final BigDecimal nonExistingCard = OrderStats.averageProductPriceForCreditCard(customerStream, "INVALID");
         assertEquals("Average product price for non-existing card should be 0",
                 BigDecimal.ZERO, nonExistingCard);
