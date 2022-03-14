@@ -35,6 +35,43 @@ class TaskTest {
         assertEquals(expected, new Task().groupByDigitNumbers(actual));
     }
 
+    @DisplayName("Should pass when method returns map with \"o\" in values")
+    @ParameterizedTest
+    @MethodSource
+    void groupByDigitNumbersTest_Neg(int[] actual, Map<Integer, List<String>> expected) {
+        assertEquals(expected, new Task().groupByDigitNumbers(actual));
+    }
+
+    public static Stream<Arguments> groupByDigitNumbersTest_Neg() {
+        Map<Integer, List<String>> map1 = new HashMap<>();
+        map1.put(1, List.of("e8"));
+        map1.put(2, List.of("e44", "o51"));
+
+        Map<Integer, List<String>> map2 = new HashMap<>();
+        map2.put(1, List.of("e2", "o1"));
+        map2.put(2, List.of("e48"));
+
+        Map<Integer, List<String>> map3 = new HashMap<>();
+        map3.put(1, List.of("e0"));
+        map3.put(2, List.of("o83"));
+        map3.put(4, List.of("o1645"));
+
+        return Stream.of(
+                Arguments.of(
+                        new int[]{-3, 44, -108, 8, 51},
+                        map1
+                ),
+                Arguments.of(
+                        new int[]{2, -21, 48, -33, 1},
+                        map2
+                ),
+                Arguments.of(
+                        new int[]{-11, 83, 1645, -232, 0},
+                        map3
+                )
+        );
+    }
+
     public static Stream<Arguments> groupByDigitNumbersTest_All() {
         Map<Integer, List<String>> map1 = new HashMap<>();
         map1.put(1, List.of("o3", "e8"));
